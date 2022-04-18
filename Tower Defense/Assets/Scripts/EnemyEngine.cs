@@ -7,12 +7,14 @@ public class EnemyEngine : MonoBehaviour
 {
     private GameManager GameManager;
     private GameObject[] _pathingNodes; // An array storing the positions where the enemy will change course, pulled from nodes placed in the scene
+    [SerializeField] private Transform _healthBarTransform;
     [SerializeField] private TMP_Text LivesText; // The reference to change the text on the UI Lives Counter, set in inspector
     private int _nodeProgress; // Keeps track of where the enemy is heading next (pathing)
     public int NumberOfLives; // Tracks the number of lives each enemy has, default value will increase with game length, if reduced to 0 enemy is killed
     private int CashBounty; // Tracks the amount of money each enemy will drop, default value will increase with game length, used to buy/upgrade towers
     private float MoveSpeed; // The speed at which the enemy moves
-    public int StepsTaken; // Will be used by towers to establish priority;
+    public int StepsTaken; // Will be used by towers to establish priority
+    private int StartingHealth; // Will be used to track how much damage has been taken for visuals
 
     private void Start() // Note: Enemies will be always generated at _pathingNodes[0].position
     {
@@ -30,7 +32,8 @@ public class EnemyEngine : MonoBehaviour
 
     private void SetStartingLives()
     {
-        NumberOfLives = GameManager.EnemyLives;
+        StartingHealth = GameManager.EnemyLives;
+        NumberOfLives = StartingHealth;
         LivesText.text = NumberOfLives.ToString();
     }
     private void SetStartingValue()
@@ -72,6 +75,9 @@ public class EnemyEngine : MonoBehaviour
     public void TakeDamage(int DamageTaken)
     {
         NumberOfLives -= DamageTaken;
+        LivesText.text = NumberOfLives.ToString();
+        float _HealthBarScale = (((float)NumberOfLives / (float)StartingHealth) * 0.9f);
+        _healthBarTransform.localScale = new Vector3(_HealthBarScale, _HealthBarScale, 1);
         if (NumberOfLives <= 0)
         {
             GameManager.SetMoney(GameManager.S_PlayerCash + CashBounty);

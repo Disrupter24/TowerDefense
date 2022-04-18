@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     {
         LivesRamp();
         SpeedRamp();
+        DelayRamp();
     }
     private void LivesRamp() // Increases enemy lives by 10% or 1, whichever is higher.
     {
@@ -74,6 +75,13 @@ public class GameManager : MonoBehaviour
     private void SpeedRamp()
     {
         EnemySpeed *= 1.05f;
+    }
+    private void DelayRamp()
+    {
+        if (DelayBetweenEnemies > 0.2)
+        {
+            DelayBetweenEnemies *= 0.9f;
+        }
     }
     public void EnemyLeaked()
     {
