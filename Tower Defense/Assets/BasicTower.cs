@@ -6,12 +6,21 @@ public class BasicTower : MonoBehaviour
 {
     private Collider[] s_ObjectsinRange;
     private GameObject _currentTarget;
-    private int _attackSpeed = 1; // Delay between attacks in seconds.
-    private int _attackDamage = 1; // Damage done to an enemy on attack.'
     private LineRenderer LaserShot; // Strictly visual feedback on the tower's shots.
-    // Start is called before the first frame update
+
+    // VALUES FOR UPDATING THE TOWER MENU //
+    [HideInInspector] public int TowerScore; // The number of damage done by the tower.
+    [HideInInspector] public float AttackSpeed = 1; // Delay between attacks in seconds.
+    [HideInInspector] public int AttackDamage = 1; // Damage done to an enemy on attack.
+    [HideInInspector] public int DamageCost; // The cost to upgrade the tower's attack damage.
+    [HideInInspector] public int SpeedCost; // The cost to upgrade the tower's attack speed.
+    [HideInInspector] public int SaleCost; // The money gained from the tower's sale.
+
     void Start()
     {
+        SaleCost = 25;
+        SpeedCost = 50;
+        DamageCost = 50;
         LaserShot = GetComponent<LineRenderer>();
         LaserShot.SetPosition(0, new Vector3(transform.position.x, transform.position.y, -1));
         StartCoroutine(ShootingSystem());
@@ -24,11 +33,21 @@ public class BasicTower : MonoBehaviour
             AcquireTarget();
             if (_currentTarget != null)
             {
-                _currentTarget.GetComponent<EnemyEngine>().TakeDamage(_attackDamage); // Shoots the enemy
+                if (_currentTarget.GetComponent<EnemyEngine>().NumberOfLives >= AttackDamage)
+                {
+                    TowerScore += AttackDamage;
+                }
+                else
+                {
+                    TowerScore += _currentTarget.GetComponent<EnemyEngine>().NumberOfLives;
+                }
+
+                _currentTarget.GetComponent<EnemyEngine>().TakeDamage(AttackDamage); // Shoots the enemy
+
                 LaserShotVisuals(true);
                 yield return new WaitForSeconds(0.1f);
                 LaserShotVisuals(false);
-                yield return new WaitForSeconds(_attackSpeed - 0.125f);
+                yield return new WaitForSeconds(AttackSpeed - 0.125f);
             }
             yield return new WaitForSeconds(0.025f);
         }
@@ -65,5 +84,4 @@ public class BasicTower : MonoBehaviour
             _currentTarget = null;
         }
     }
-
 }

@@ -80,6 +80,7 @@ public class EnemyEngine : MonoBehaviour
         _healthBarTransform.localScale = new Vector3(_HealthBarScale, _HealthBarScale, 1);
         if (NumberOfLives <= 0)
         {
+            GameManager.ScoreUp(StartingHealth);
             GameManager.SetMoney(GameManager.S_PlayerCash + CashBounty);
             Destroy(gameObject);
         }

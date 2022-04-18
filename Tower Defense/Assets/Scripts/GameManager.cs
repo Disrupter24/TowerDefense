@@ -19,10 +19,13 @@ public class GameManager : MonoBehaviour
     private static TMP_Text s_LivesText;
     public static int S_PlayerCash; // The amount of cash the player has (spent on towers/upgrades)
     private static TMP_Text s_CashText;
+    public static int S_PlayerScore; // The amount of enemies the player has defeated
+    private static TMP_Text s_ScoreText;
     void Start()
     {
         s_LivesText = GameObject.Find("LivesText").GetComponent<TMP_Text>();
         s_CashText = GameObject.Find("CashText").GetComponent<TMP_Text>();
+        s_ScoreText = GameObject.Find("ScoreText").GetComponent<TMP_Text>();
         EnemyParent = GameObject.Find("Enemies");
         EnemyLives = 1;
         EnemyValue = 3;
@@ -91,6 +94,11 @@ public class GameManager : MonoBehaviour
     public static void SetMoney(int MoneyValue)
     {
         S_PlayerCash = MoneyValue;
-        s_CashText.text = ("Cash: " + S_PlayerCash.ToString());
+        s_CashText.text = ("Cash: " + S_PlayerCash.ToString() + "$");
+    }
+    public static void ScoreUp(int PointsGained)
+    {
+        S_PlayerScore += PointsGained;
+        s_ScoreText.text = ("Score: " + S_PlayerScore.ToString());
     }
 }
