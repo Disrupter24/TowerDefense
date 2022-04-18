@@ -102,7 +102,7 @@ public class MenuManager : MonoBehaviour
         GameManager.SetMoney(GameManager.S_PlayerCash -= CurrentTower.DamageCost);
         CurrentTower.SaleCost += Mathf.RoundToInt(0.5f * CurrentTower.DamageCost);
         CurrentTower.AttackDamage += (1);
-        CurrentTower.SpeedCost += (100);
+        CurrentTower.DamageCost += (100);
     }
     public void SellTower()
     {
